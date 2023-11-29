@@ -23,12 +23,6 @@ router.delete('/users/:id', adminController.deletetUser);
  * 분류 Category
  */
 
-// 분류 카테고리 목록 조회
-router.get('/categories', adminController.getCategories);
-
-// 분류 카테고리 상세 조회
-router.get('/categories/:categoryId', adminController.getCategoryById);
-
 // 분류 카테고리 등록
 router.post('/categories', adminController.createCategory);
 
@@ -41,15 +35,6 @@ router.delete('/categories/:categoryId', adminController.deleteCategory);
 /**
  * 지역 Category
  */
-
-// 지역 카테고리 목록 조회
-router.get('/categories/regionCategories', adminController.getRegionCategories);
-
-// 지역 카테고리 상세 조회
-router.get(
-  '/categories/regionCategories/:categoryId',
-  adminController.getRegionCategoryById
-);
 
 // 지역 카테고리 등록
 router.post(

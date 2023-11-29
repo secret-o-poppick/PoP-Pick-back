@@ -7,15 +7,16 @@ const userRouter = require('./api/userAPI');
 const adminRouter = require('./api/adminAPI');
 const authRouter = require('./api/authAPI');
 const storeRouter = require('./api/storeAPI');
+const categoryRouter = require('./api/categoryAPI');
+const regionCategoryRouter = require('./api/regionCategoryAPI');
 
-const apiRouter = router //
+const apiRouter = router
   .use('/users', userRouter)
   .use('/admin', adminRouter)
   .use('/stores', storeRouter)
   .use('/auth', authRouter)
-  .use('/', (req, res) => {
-    res.json({ test: 'hi?' });
-  });
+  .use('/categories', categoryRouter)
+  .use('/regionCategories', regionCategoryRouter);
 
 module.exports = {
   apiRouter,
