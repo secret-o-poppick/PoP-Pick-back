@@ -17,7 +17,7 @@ mongoose.connection.on('connected', () => {
 app.use(express.json());
 app.use(cors());
 
-app.get('/', apiRouter);
+app.use('/api', apiRouter);
 app.use(errorHandler);
 
 const port = process.env.PORT;
