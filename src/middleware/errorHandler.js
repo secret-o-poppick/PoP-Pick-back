@@ -1,5 +1,9 @@
+const { CustomError } = require('../utils/error.js');
+
 const errorHandler = (err, req, res, next) => {
-  res.status(err.statusCode).json({ ...err, message: err.message });
+  const error = err instanceof CustomError ? err : new CustomError(err);
+
+  res.status(error.statusCode).json({ ...error, message: error.message });
 
   next();
 };

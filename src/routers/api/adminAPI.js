@@ -1,3 +1,9 @@
+const { asyncHandler } = require('../../middleware/asyncHandler');
+const {
+  inputValidator,
+  category,
+} = require('../../middleware/validator/index');
+
 const { Router } = require('express');
 const router = Router();
 
@@ -24,13 +30,24 @@ router.delete('/users/:id', adminController.deletetUser);
  */
 
 // 분류 카테고리 등록
-router.post('/categories', adminController.createCategory);
+router.post(
+  '/categories',
+  inputValidator(category.post),
+  asyncHandler(adminController.createCategory)
+);
 
 // 분류 카테고리 수정
-router.put('/categories/:categoryId', adminController.updateCategory);
+router.put(
+  '/categories/:categoryId',
+  inputValidator(category.put),
+  asyncHandler(adminController.updateCategory)
+);
 
 // 분류 카테고리 삭제
-router.delete('/categories/:categoryId', adminController.deleteCategory);
+router.delete(
+  '/categories/:categoryId',
+  asyncHandler(adminController.deleteCategory)
+);
 
 /**
  * 지역 Category
@@ -38,20 +55,20 @@ router.delete('/categories/:categoryId', adminController.deleteCategory);
 
 // 지역 카테고리 등록
 router.post(
-  '/categories/regionCategories',
-  adminController.createRegionCategory
+  '/regionCategories',
+  asyncHandler(adminController.createRegionCategory)
 );
 
 // 지역 카테고리 수정
 router.put(
-  '/categories/regionCategories/:categoryId',
-  adminController.updateRegionCategory
+  '/regionCategories/:categoryId',
+  asyncHandler(adminController.updateRegionCategory)
 );
 
 // 지역 카테고리 삭제
 router.delete(
-  '/categories/regionCategories/:categoryId',
-  adminController.deleteRegionCategory
+  '/regionCategories/:categoryId',
+  asyncHandler(adminController.deleteRegionCategory)
 );
 
 /**

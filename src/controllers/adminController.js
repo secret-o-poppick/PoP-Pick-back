@@ -1,4 +1,5 @@
 const adminService = require('../services/adminService');
+const categoryService = require('../services/categoryService');
 
 /**
  * User
@@ -32,69 +33,40 @@ exports.deletetUser = async (req, res, next) => {
  * 분류 Category
  */
 
-// 분류 카테고리 목록 조회
-exports.getCategories = async (req, res, next) => {
-  try {
-  } catch (e) {}
-};
-
-// 분류 카테고리 상세 조회
-exports.getCategoryById = async (req, res, next) => {
-  try {
-  } catch (e) {}
-};
-
 // 분류 카테고리 등록
 exports.createCategory = async (req, res, next) => {
-  try {
-  } catch (e) {}
+  const data = await categoryService.createCategory(req.body);
+  res.status(201).json(data);
 };
 
 // 분류 카테고리 수정
 exports.updateCategory = async (req, res, next) => {
-  try {
-  } catch (e) {}
+  const { categoryId } = req.params;
+
+  const data = await categoryService.updateCategory(categoryId, req.body);
+  res.status(200).json(data);
 };
 
 // 분류 카테고리 삭제
 exports.deleteCategory = async (req, res, next) => {
-  try {
-  } catch (e) {}
+  const { categoryId } = req.params;
+
+  const data = await categoryService.deleteCategory(categoryId);
+  res.status(200).json(data);
 };
 
 /**
  * 지역 Category
  */
 
-// 지역 카테고리 목록 조회
-exports.getRegionCategories = async (req, res, next) => {
-  try {
-  } catch (e) {}
-};
-
-// 지역 카테고리 상세 조회
-exports.getRegionCategoryById = async (req, res, next) => {
-  try {
-  } catch (e) {}
-};
-
 // 지역 카테고리 등록
-exports.createRegionCategory = async (req, res, next) => {
-  try {
-  } catch (e) {}
-};
+exports.createRegionCategory = async (req, res, next) => {};
 
 // 지역 카테고리 수정
-exports.updateRegionCategory = async (req, res, next) => {
-  try {
-  } catch (e) {}
-};
+exports.updateRegionCategory = async (req, res, next) => {};
 
 // 지역 카테고리 삭제
-exports.deleteRegionCategory = async (req, res, next) => {
-  try {
-  } catch (e) {}
-};
+exports.deleteRegionCategory = async (req, res, next) => {};
 
 /**
  * Store

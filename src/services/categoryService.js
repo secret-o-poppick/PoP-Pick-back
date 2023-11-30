@@ -1,3 +1,4 @@
+const { APIError } = require('../utils/error.js');
 const { ObjectId } = require('mongodb');
 const { Category, LocationCategory } = require('../models/index');
 
@@ -13,7 +14,36 @@ exports.categoryList = async () => {
 
 // 분류 카테고리 상세 조회
 exports.categoryDetail = async (categoryId) => {
-  const category = await Category.findById({ _id: categoryId });
+  const category = await Category.findById({ _id: categoryId }).exec();
+  return category;
+};
+
+// 분류 카테고리 등록
+exports.createCategory = async (body) => {
+  const category = await Category.create(body);
+  return category;
+};
+
+// 분류 카테고리 수정
+exports.updateCategory = async (_id, body) => {
+  const isExists = await this.categoryDetail(_id);
+  if (!isExists) {
+    throw new APIError('수정할 데이터가 존재하지 않습니다.');
+  }
+
+  const { name } = body;
+  const category = await Category.updateOne({ _id }, { $set: { name } }).exec();
+  return category;
+};
+
+// 분류 카테고리 삭제
+exports.deleteCategory = async (_id) => {
+  const isExists = await this.categoryDetail(_id);
+  if (!isExists) {
+    throw new APIError('삭제할 데이터가 존재하지 않습니다.');
+  }
+
+  const category = await Category.deleteOne({ _id });
   return category;
 };
 

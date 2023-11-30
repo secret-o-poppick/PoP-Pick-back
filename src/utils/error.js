@@ -1,4 +1,4 @@
-class APIError extends Error {
+class CustomError extends Error {
   constructor(message, statusCode = 500, name = 'Internal Server Error') {
     super(message);
     this.statusCode = statusCode;
@@ -6,7 +6,15 @@ class APIError extends Error {
   }
 }
 
-class NotFoundError extends Error {
+class APIError extends CustomError {
+  constructor(message, statusCode = 500, name = 'Internal Server Error') {
+    super(message);
+    this.statusCode = statusCode;
+    this.name = name;
+  }
+}
+
+class NotFoundError extends CustomError {
   constructor(message, statusCode = 404, name = 'Not Found') {
     super(message);
     this.statusCode = statusCode;
@@ -14,15 +22,16 @@ class NotFoundError extends Error {
   }
 }
 
-class ValidationError extends Error {
+class ValidationError extends CustomError {
   constructor(message, statusCode = 400, name = 'ValidationError', opt = []) {
     super(message);
     this.statusCode = statusCode;
+    this.name = name;
     this.detail = opt;
   }
 }
 
-class AuthError extends Error {
+class AuthError extends CustomError {
   constructor(message, statusCode = 401, name = 'Unauthorized') {
     super(message);
     this.statusCode = statusCode;
@@ -30,7 +39,7 @@ class AuthError extends Error {
   }
 }
 
-class SchemaNotFoundError extends Error {
+class SchemaNotFoundError extends CustomError {
   constructor(message, statusCode = 500, name = 'SchemaNotFoundError') {
     super(message);
     this.statusCode = statusCode;
@@ -38,7 +47,7 @@ class SchemaNotFoundError extends Error {
   }
 }
 
-class DuplicateError extends Error {
+class DuplicateError extends CustomError {
   constructor(message, statusCode = 400, name = 'DuplicateError') {
     super(message);
     this.statusCode = statusCode;
@@ -46,7 +55,8 @@ class DuplicateError extends Error {
   }
 }
 
-export {
+module.exports = {
+  CustomError,
   APIError,
   NotFoundError,
   ValidationError,
