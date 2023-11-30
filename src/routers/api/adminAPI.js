@@ -21,10 +21,10 @@ router.post(
 );
 
 // 회원 목록 조회
-router.get('/users', adminController.getUsersInfo);
+router.get('/users', asyncHandler(adminController.getUsers));
 
 // 회원 상세 조회
-router.get('/users/:id', adminController.getUsersInfoByUserId);
+router.get('/users/:userId', asyncHandler(adminController.getUsersByUserId));
 
 // 회원 권한 변경
 router.put('/users/:id', adminController.updatedUserRole);

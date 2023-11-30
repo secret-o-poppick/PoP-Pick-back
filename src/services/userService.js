@@ -53,3 +53,30 @@ exports.adminLogin = async (body) => {
 
   return { accessToken, userId: user._id, role: user.role };
 };
+
+// 회원 목록 조회
+exports.getUsers = async (query) => {
+  const { page = 1, perPage = 10, role } = query;
+  const q = role ? { role } : {};
+
+  const users = await User.find(q)
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * perPage)
+    .limit(Number(perPage))
+    .select(
+      '_id email name sns nickName businessNumber businessNumberFlg role createdAt updatedAt'
+    );
+
+  return users;
+};
+
+// 회원 상세 조회
+exports.getUsersByUserId = async (userId) => {
+  const user = await User.findById({ _id: userId })
+    .select(
+      '_id email name sns nickName businessNumber businessNumberFlg role createdAt updatedAt'
+    )
+    .exec();
+
+  return user;
+};

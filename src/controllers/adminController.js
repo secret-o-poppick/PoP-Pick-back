@@ -12,15 +12,17 @@ exports.createUser = async (req, res, next) => {
 };
 
 // 회원 목록 조회
-exports.getUsersInfo = async (req, res, next) => {
-  try {
-  } catch (e) {}
+exports.getUsers = async (req, res, next) => {
+  const users = await userService.getUsers(req.query);
+  res.status(200).json(users);
 };
 
 // 회원 상세 조회
-exports.getUsersInfoByUserId = async (req, res, next) => {
-  try {
-  } catch (e) {}
+exports.getUsersByUserId = async (req, res, next) => {
+  const { userId } = req.params;
+
+  const users = await userService.getUsersByUserId(userId);
+  res.status(200).json(users);
 };
 
 // 회원 권한 변경
