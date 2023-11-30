@@ -1,9 +1,15 @@
-const adminService = require('../services/adminService');
 const categoryService = require('../services/categoryService');
+const userService = require('../services/userService');
 
 /**
  * User
  */
+
+// 회원 등록
+exports.createUser = async (req, res, next) => {
+  const data = await userService.createUser(req.body);
+  res.status(201).json(data);
+};
 
 // 회원 목록 조회
 exports.getUsersInfo = async (req, res, next) => {

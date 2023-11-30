@@ -3,11 +3,14 @@ const router = Router();
 
 const authController = require('../../controllers/authController');
 
-/*
- * TODO : 데이터 검증 middleware 추가
- */
+const { asyncHandler } = require('../../middleware/asyncHandler');
+const { inputValidator, user } = require('../../middleware/validator/index');
 
-// 로그인
-router.post('/', authController.login);
+// 관리자 로그인
+router.post(
+  '/',
+  inputValidator(user.login),
+  asyncHandler(authController.login)
+);
 
 module.exports = router;

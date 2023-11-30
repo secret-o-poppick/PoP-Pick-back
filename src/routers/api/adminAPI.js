@@ -2,6 +2,7 @@ const { asyncHandler } = require('../../middleware/asyncHandler');
 const {
   inputValidator,
   category,
+  user,
 } = require('../../middleware/validator/index');
 
 const { Router } = require('express');
@@ -12,6 +13,12 @@ const adminController = require('../../controllers/adminController');
 /*
  * TODO : 데이터 검증 middleware 추가
  */
+// 회원 등록
+router.post(
+  '/users',
+  inputValidator(user.post),
+  asyncHandler(adminController.createUser)
+);
 
 // 회원 목록 조회
 router.get('/users', adminController.getUsersInfo);
