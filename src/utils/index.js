@@ -15,8 +15,8 @@ const comparePassword = (password, newPassword) => {
 
 const { ACCESS_TOKEN_SECRET } = process.env;
 
-const createAccessToken = ({ _id, email, authority }) => {
-  return jwt.sign({ _id, email, authority }, ACCESS_TOKEN_SECRET, {
+const createAccessToken = ({ _id, email, role }) => {
+  return jwt.sign({ _id, email, role }, ACCESS_TOKEN_SECRET, {
     expiresIn: '1d',
   });
 };

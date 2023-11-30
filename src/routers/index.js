@@ -10,9 +10,12 @@ const storeRouter = require('./api/storeAPI');
 const categoryRouter = require('./api/categoryAPI');
 const regionCategoryRouter = require('./api/regionCategoryAPI');
 
+const { isAuth } = require('../middleware/isAuth');
+const { isAdmin } = require('../middleware/isAdmin');
+
 const apiRouter = router
   .use('/users', userRouter)
-  .use('/admin', adminRouter)
+  .use('/admin', isAuth, isAdmin, adminRouter)
   .use('/stores', storeRouter)
   .use('/auth', authRouter)
   .use('/categories', categoryRouter)
