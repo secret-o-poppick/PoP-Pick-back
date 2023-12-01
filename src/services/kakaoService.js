@@ -1,10 +1,13 @@
 require('dotenv').config();
 const axios = require('axios');
-const { AuthError } = require('../utils/error');
+const { AuthError, APIError } = require('../utils/error');
 const { createAccessToken } = require('../utils/index');
-const { getUsersByUserSocialId } = require('./userService');
-const { REACT_APP_KAKAO_REST_API_KEY, REACT_APP_KAKAO_REDIRECT_URI } =
-  process.env;
+const { getUsersByUserSocialId, getUsersByUserId } = require('./userService');
+const {
+  REACT_APP_KAKAO_REST_API_KEY,
+  REACT_APP_KAKAO_REDIRECT_URI,
+  REACT_APP_KAKAO_ADMIN_KEY,
+} = process.env;
 
 // 카카오 로그인
 exports.kakaoLogin = async (body) => {
@@ -42,6 +45,31 @@ exports.kakaoLogin = async (body) => {
   });
 
   return { accessToken, userId: user._id, role: user.role };
+};
+
+// 카카오 연결 끊기
+exports.kakaoWithdrawal = async (_id) => {
+  const user = await getUsersByUserId(_id);
+
+  if (!user) {
+    new APIError('유저가 존재하지 않습니다.');
+  }
+
+  const res = await axios.post(
+    'https://kapi.kakao.com/v1/user/unlink',
+    {
+      target_id_type: 'user_id',
+      target_id: user.socialId,
+    },
+    {
+      headers: {
+        Authorization: `KakaoAK ${REACT_APP_KAKAO_ADMIN_KEY}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }
+  );
+
+  return res.data;
 };
 
 // 카카오 토큰 받기
