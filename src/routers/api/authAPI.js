@@ -15,6 +15,9 @@ router.post(
   asyncHandler(authController.login)
 );
 
+// 카카오 로그인 주소 요청
+router.get('/kakao/login', asyncHandler(authController.KakaoLoginPage));
+
 // 카카오 로그인
 router.post('/kakao', asyncHandler(authController.KakaoLogin));
 
@@ -24,5 +27,8 @@ router.post(
   isAuth,
   asyncHandler(authController.kakaoWithdrawal)
 );
+
+// 카카오 로그아웃
+router.post('/kakao/logout', isAuth, asyncHandler(authController.kakaoLogout));
 
 module.exports = router;

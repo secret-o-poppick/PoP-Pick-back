@@ -7,7 +7,14 @@ const {
   REACT_APP_KAKAO_REST_API_KEY,
   REACT_APP_KAKAO_REDIRECT_URI,
   REACT_APP_KAKAO_ADMIN_KEY,
+  REACT_APP_KAKAO_CLIENT_SECRET,
 } = process.env;
+
+// 카카오 로그인 페이지
+exports.KakaoLoginPage = () => {
+  const path = `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${REACT_APP_KAKAO_REDIRECT_URI}&response_type=code&prompt`;
+  return { path };
+};
 
 // 카카오 로그인
 exports.kakaoLogin = async (body) => {
@@ -69,6 +76,39 @@ exports.kakaoWithdrawal = async (_id) => {
     }
   );
 
+  if (!res) {
+    new APIError('연결끊기 실패');
+  }
+
+  return res.data;
+};
+
+// 카카오 로그아웃
+exports.kakaoLogout = async (_id) => {
+  const user = await getUsersByUserId(_id);
+
+  if (!user) {
+    new APIError('유저가 존재하지 않습니다.');
+  }
+
+  const res = await axios.post(
+    `https://kapi.kakao.com/v1/user/logout`,
+    {
+      target_id_type: 'user_id',
+      target_id: user.socialId,
+    },
+    {
+      headers: {
+        Authorization: `KakaoAK ${REACT_APP_KAKAO_ADMIN_KEY}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }
+  );
+
+  if (!res) {
+    new APIError('로그아웃 실패');
+  }
+
   return res.data;
 };
 
@@ -81,6 +121,7 @@ const getKakaoToken = async (code) => {
       client_id: REACT_APP_KAKAO_REST_API_KEY,
       redirect_uri: REACT_APP_KAKAO_REDIRECT_URI,
       code,
+      client_secret: REACT_APP_KAKAO_CLIENT_SECRET,
     },
     {
       headers: {
@@ -97,7 +138,6 @@ const getKakaoUserInfo = async (token) => {
   const user = await axios.get('https://kapi.kakao.com/v1/oidc/userinfo', {
     headers: {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
     },
   });
 
