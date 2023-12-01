@@ -2,9 +2,13 @@ const { Schema } = require('mongoose');
 
 const UserSchema = new Schema(
   {
+    socialId: {
+      type: String,
+      required: false,
+    },
     email: {
       type: String,
-      required: true,
+      required: false,
     },
     password: {
       type: String,
@@ -15,6 +19,10 @@ const UserSchema = new Schema(
       required: true,
     },
     sns: {
+      type: String,
+      require: false,
+    },
+    image: {
       type: String,
       require: false,
     },

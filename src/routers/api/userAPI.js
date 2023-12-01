@@ -1,13 +1,15 @@
 const { Router } = require('express');
 const router = Router();
 
+const { asyncHandler } = require('../../middleware/asyncHandler');
+
 const userController = require('../../controllers/userController');
 
 /*
  * TODO : 데이터 검증 middleware 추가
  */
 // 사용자 정보 조회
-router.get('/', userController.getUserInfo);
+router.get('/', asyncHandler(userController.getUserInfo));
 
 // 사용자 정보 수정
 router.put('/', userController.updateUserInfo);

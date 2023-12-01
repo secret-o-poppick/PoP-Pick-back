@@ -2,8 +2,8 @@ const userService = require('../services/userService');
 
 // 사용자 정보 조회
 exports.getUserInfo = async (req, res, next) => {
-  try {
-  } catch (e) {}
+  const user = await userService.getUsersByUserId(req.auth._id);
+  res.status(200).json(user);
 };
 
 // 사용자 정보 수정

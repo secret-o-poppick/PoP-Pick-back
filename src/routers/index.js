@@ -14,7 +14,7 @@ const { isAuth } = require('../middleware/isAuth');
 const { isAdmin } = require('../middleware/isAdmin');
 
 const apiRouter = router
-  .use('/users', userRouter)
+  .use('/users', isAuth, userRouter)
   .use('/admin', isAuth, isAdmin, adminRouter)
   .use('/stores', storeRouter)
   .use('/auth', authRouter)

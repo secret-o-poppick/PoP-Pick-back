@@ -74,9 +74,19 @@ exports.getUsers = async (query) => {
 exports.getUsersByUserId = async (userId) => {
   const user = await User.findById({ _id: userId })
     .select(
-      '_id email name sns nickName businessNumber businessNumberFlg role createdAt updatedAt'
+      '_id socialId email name sns nickName businessNumber businessNumberFlg role image createdAt updatedAt'
     )
     .exec();
 
+  return user;
+};
+
+// 회원 상세 조회(소셜아이디로)
+exports.getUsersByUserSocialId = async (socialId) => {
+  const user = await User.findOne({ socialId })
+    .select(
+      '_id socialId email name sns nickName businessNumber businessNumberFlg role image createdAt updatedAt'
+    )
+    .exec();
   return user;
 };
