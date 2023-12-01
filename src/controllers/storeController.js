@@ -2,8 +2,8 @@ const storeService = require('../services/storeService');
 
 //팝업 스토어 목록 조회
 exports.getStores = async (req, res, next) => {
-  try {
-  } catch (e) {}
+  const stores = await storeService.getStores(req.query);
+  res.json(stores);
 };
 
 //팝업 스토어 상세 조회

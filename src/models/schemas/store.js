@@ -3,7 +3,7 @@ const { Schema } = require('mongoose');
 
 const StoreSchema = new Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
     },
@@ -16,7 +16,7 @@ const StoreSchema = new Schema(
       required: true,
       ref: 'Category',
     },
-    LocationId: {
+    locationId: {
       type: [ObjectId],
       required: true,
       ref: 'LocationCategory',
@@ -26,11 +26,11 @@ const StoreSchema = new Schema(
       required: true,
     },
     startDate: {
-      type: Date,
+      type: Number,
       required: true,
     },
     endDate: {
-      type: Date,
+      type: Number,
       required: true,
     },
     isActive: {
