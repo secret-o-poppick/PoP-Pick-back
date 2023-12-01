@@ -13,4 +13,6 @@ router.post(
   asyncHandler(authController.login)
 );
 
+router.post('/kakao', asyncHandler(authController.KakaoLogin));
+
 module.exports = router;
