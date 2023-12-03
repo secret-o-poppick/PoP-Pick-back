@@ -14,14 +14,13 @@ exports.getStores = async function (query) {
     endDate,
     locationId,
   } = query;
-  console.log(typeof query.startDate);
 
   const conditions = {};
-  
+
   if (title) conditions.title = { $regex: new RegExp(title, 'i') };
-  if (categoryId) conditions.categoryId = categoryId;
-  if (adultVerification !== undefined)
-    conditions.adultVerification = adultVerification;
+  // if (categoryId) conditions.categoryId = categoryId;
+  // if (adultVerification !== undefined)
+  // conditions.adultVerification = adultVerification;
   if (startDate) conditions.startDate = { $lte: Number(startDate) };
   if (endDate) conditions.endDate = { $gte: Number(endDate) };
   if (locationId) conditions.locationId = { $in: [locationId] };
