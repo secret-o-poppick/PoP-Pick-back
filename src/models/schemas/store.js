@@ -26,11 +26,11 @@ const StoreSchema = new Schema(
       required: true,
     },
     startDate: {
-      type: Number,
+      type: Date,
       required: true,
     },
     endDate: {
-      type: Number,
+      type: Date,
       required: true,
     },
     isActive: {

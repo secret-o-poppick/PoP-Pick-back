@@ -14,18 +14,17 @@ exports.getStores = async function (query) {
     endDate,
     locationId,
   } = query;
-
   const conditions = {};
 
   if (title) conditions.title = { $regex: new RegExp(title, 'i') };
   if (startDate || endDate) {
     conditions.$or = [
-      { startDate: { $gte: Number(startDate), $lte: Number(endDate) } },
-      { endDate: { $gte: Number(startDate), $lte: Number(endDate) } },
+      { startDate: { $gte: startDate, $lte: endDate } },
+      { endDate: { $gte: startDate, $lte: endDate } },
       {
         $and: [
-          { startDate: { $lte: Number(startDate) } },
-          { endDate: { $gte: Number(endDate) } },
+          { startDate: { $lte: startDate } },
+          { endDate: { $gte: endDate } },
         ],
       },
     ];
