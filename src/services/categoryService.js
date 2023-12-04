@@ -95,7 +95,7 @@ exports.regionCategoryList = async () => {
         children: 1,
       },
     },
-  ]);
+  ]).sort({ createdAt: -1 });
   return categories;
 };
 
@@ -145,6 +145,6 @@ exports.regionCategoryDetail = async (categoryId) => {
         ],
       },
     },
-  ]);
+  ]).sort({ createdAt: -1 });
   return category;
 };

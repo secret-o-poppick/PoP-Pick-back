@@ -33,6 +33,7 @@ exports.getStores = async function (query) {
 
   if (locationId) conditions.locationId = { $in: [locationId] };
   const stores = await Store.find(conditions)
+    .populate('categoryId')
     .skip((page - 1) * perPage)
     .limit(Number(perPage));
 

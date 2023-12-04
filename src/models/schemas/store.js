@@ -12,7 +12,7 @@ const StoreSchema = new Schema(
       required: true,
     },
     categoryId: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'Category',
     },
@@ -51,10 +51,10 @@ const StoreSchema = new Schema(
       type: Boolean,
       required: true,
     },
-    isFree: {
-      type: Boolean,
-      required: true,
-    },
+    // isFree: {
+    //   type: Boolean,
+    //   required: true,
+    // },
     fee: {
       type: Number,
       required: true,
