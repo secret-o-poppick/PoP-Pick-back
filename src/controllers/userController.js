@@ -2,8 +2,15 @@ const userService = require('../services/userService');
 
 // 사용자 정보 조회
 exports.getUserInfo = async (req, res, next) => {
-  const user = await userService.getUsersByUserId(req.auth._id);
-  res.status(200).json(user);
+  const user = await userService.getUsersByUserSocialId(req.auth.sub, '카카오');
+  const { _id, soscialId, name, image, nickName, role, sns } = user;
+  const response = { _id, soscialId, name, image, nickName, role, sns };
+
+  if (req.id_token) {
+    response.id_token = req.id_token;
+  }
+
+  res.status(200).json(response);
 };
 
 // 사용자 정보 수정
