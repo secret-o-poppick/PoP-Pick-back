@@ -21,12 +21,12 @@ exports.KakaoLogin = async (req, res, next) => {
 
 // 카카오 로그아웃
 exports.kakaoLogout = async (req, res, next) => {
-  const data = await kakaoService.kakaoLogout(req.auth._id);
+  const data = await kakaoService.kakaoLogout(req.auth.sub);
   res.status(200).json(data);
 };
 
 // 카카오 연결 끊기
 exports.kakaoWithdrawal = async (req, res, next) => {
-  const data = await kakaoService.kakaoWithdrawal(req.auth._id);
+  const data = await kakaoService.kakaoWithdrawal(req.auth.sub);
   res.status(200).json(data);
 };

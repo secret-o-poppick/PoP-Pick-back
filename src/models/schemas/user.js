@@ -53,6 +53,14 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
+    refreshToken: {
+      type: String,
+      required: false,
+    },
+    refreshExpiresIn: {
+      type: Number,
+      required: false,
+    },
   },
   {
     timestamps: true,

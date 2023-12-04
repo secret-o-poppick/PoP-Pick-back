@@ -15,17 +15,24 @@ exports.getStores = async function (query) {
     endDate,
     locationId,
   } = query;
-
   const conditions = {};
 
-  if (title) conditions.title = { $regex: new RegExp(title, "i") };
-  // if (categoryId) conditions.categoryId = categoryId;
-  // if (adultVerification !== undefined)
-  // conditions.adultVerification = adultVerification;
-  if (startDate) conditions.startDate = { $lte: Number(startDate) };
-  if (endDate) conditions.endDate = { $gte: Number(endDate) };
+  if (title) conditions.title = { $regex: new RegExp(title, 'i') };
+  if (startDate || endDate) {
+    conditions.$or = [
+      { startDate: { $gte: startDate, $lte: endDate } },
+      { endDate: { $gte: startDate, $lte: endDate } },
+      {
+        $and: [
+          { startDate: { $lte: startDate } },
+          { endDate: { $gte: endDate } },
+        ],
+      },
+    ];
+  }
   if (locationId) conditions.locationId = { $in: [locationId] };
   const stores = await Store.find(conditions)
+    .populate('categoryId')
     .skip((page - 1) * perPage)
     .limit(Number(perPage));
 

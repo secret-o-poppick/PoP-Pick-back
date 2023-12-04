@@ -1,4 +1,4 @@
-const { AuthError, DuplicateError } = require('../utils/error.js');
+const { AuthError, DuplicateError, APIError } = require('../utils/error.js');
 const { User } = require('../models/index');
 
 const {
@@ -74,7 +74,7 @@ exports.getUsers = async (query) => {
 exports.getUsersByUserId = async (userId) => {
   const user = await User.findById({ _id: userId })
     .select(
-      '_id socialId email name sns nickName businessNumber businessNumberFlg role image createdAt updatedAt'
+      '_id socialId email name sns nickName businessNumber businessNumberFlg role image createdAt updatedAt refreshToken refreshExpiresIn'
     )
     .exec();
 
@@ -82,11 +82,44 @@ exports.getUsersByUserId = async (userId) => {
 };
 
 // 회원 상세 조회(소셜아이디로)
-exports.getUsersByUserSocialId = async (socialId) => {
-  const user = await User.findOne({ socialId })
+exports.getUsersByUserSocialId = async (socialId, sns) => {
+  const user = await User.findOne({ socialId, sns })
     .select(
-      '_id socialId email name sns nickName businessNumber businessNumberFlg role image createdAt updatedAt'
+      '_id socialId email name sns nickName businessNumber businessNumberFlg role image createdAt updatedAt refreshToken refreshExpiresIn'
     )
     .exec();
+  return user;
+};
+
+// 회원 리프레시 토큰 변경
+exports.updateUserRefreshToken = async (
+  socialId,
+  sns,
+  refreshToken,
+  refreshExpiresIn
+) => {
+  const user = await User.findOneAndUpdate(
+    { socialId, sns },
+    { $set: { refreshToken, refreshExpiresIn } }
+  );
+
+  if (!user) {
+    new APIError('유저가 존재하지 않습니다.');
+  }
+
+  return user;
+};
+
+// 회원 리프레시 토큰 삭제
+exports.removeUserRefreshToken = async (socialId, sns) => {
+  const user = await User.findOneAndUpdate(
+    { socialId, sns },
+    { $unset: { refreshToken: '', refreshExpiresIn: '' } }
+  );
+
+  if (!user) {
+    new APIError('유저가 존재하지 않습니다.');
+  }
+
   return user;
 };
