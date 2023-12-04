@@ -51,10 +51,6 @@ const StoreSchema = new Schema(
       type: Boolean,
       required: true,
     },
-    // isFree: {
-    //   type: Boolean,
-    //   required: true,
-    // },
     fee: {
       type: Number,
       required: true,
