@@ -1,6 +1,7 @@
-const { cannotHaveAUsernamePasswordPort } = require('whatwg-url');
-const { category } = require('../middleware/validator');
-const { Store } = require('../models/index');
+const { cannotHaveAUsernamePasswordPort } = require("whatwg-url");
+const { category } = require("../middleware/validator");
+const { Store } = require("../models/index");
+const { NotFoundError } = require("../utils/error");
 
 // 스토어 목록 조희
 exports.getStores = async function (query) {
@@ -29,7 +30,6 @@ exports.getStores = async function (query) {
       },
     ];
   }
-
   if (locationId) conditions.locationId = { $in: [locationId] };
   const stores = await Store.find(conditions)
     .populate('categoryId')
@@ -37,4 +37,21 @@ exports.getStores = async function (query) {
     .limit(Number(perPage));
 
   return stores;
+};
+
+// 스토어 상세 조회
+exports.getStoreById = async (params) => {
+  const store = await Store.findOne({ _id: params.storeId })
+    .populate("address")
+    .exec();
+  console.log(store);
+  return store;
+};
+
+// 스토어 등록
+exports.createStore = async (body) => {
+  console.log(body);
+  const store = await Store.create(body.storeInfo);
+
+  return store;
 };

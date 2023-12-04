@@ -1,4 +1,5 @@
 const { Schema } = require("mongoose");
+const mongoose = require("mongoose");
 
 const AddressSchema = new Schema(
   {
@@ -14,14 +15,17 @@ const AddressSchema = new Schema(
       type: String,
       require: false,
     },
-    latitude: {
+    x: {
+      // 32~39 정도
       type: Number,
       required: true,
     },
-    longitude: {
+    y: {
+      // 123~129 + 독도까지 131 정도
       type: Number,
       required: true,
     },
+    store: { type: mongoose.Schema.Types.ObjectId, ref: "Store" },
   },
   {
     timestamps: true,

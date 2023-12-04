@@ -1,5 +1,6 @@
-const { ObjectId } = require('mongodb');
-const { Schema } = require('mongoose');
+const { ObjectId } = require("mongodb");
+const { Schema } = require("mongoose");
+const mongoose = require("mongoose");
 
 const StoreSchema = new Schema(
   {
@@ -14,12 +15,12 @@ const StoreSchema = new Schema(
     categoryId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'Category',
+      ref: "Category",
     },
     locationId: {
       type: [ObjectId],
       required: true,
-      ref: 'LocationCategory',
+      ref: "LocationCategory",
     },
     images: {
       type: [String],
@@ -69,7 +70,10 @@ const StoreSchema = new Schema(
     },
     etc: {
       type: String,
-      required: true,
+    },
+    address: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
     },
   },
   {
