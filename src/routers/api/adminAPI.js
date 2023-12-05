@@ -83,21 +83,21 @@ router.delete(
  */
 
 // 팝업 스토어 목록 조회
-router.get('/stores', adminController.getStores);
+router.get('/stores', asyncHandler(adminController.getStores));
 
 // 팝업 스토어 상세 조회
-router.get('/stores/:id', adminController.getStoreById);
+router.get('/stores/:id', asyncHandler(adminController.getStoreById));
 
 // 팝업 스토어 등록
-router.post('/stores', adminController.createStore);
+router.post('/stores', asyncHandler(adminController.createStore));
 
 // 팝업 스토어 수정
-router.post('/stores/:id', adminController.updateStore);
+router.post('/stores/:id', asyncHandler(adminController.updateStore));
 
 // 팝업 스토어 삭제
-router.delete('/stores/:id', adminController.deleteStore);
+router.delete('/stores/:id', asyncHandler(adminController.deleteStore));
 
 // 팝업스토어 활성
-router.get('/stores/:id/active', adminController.setStoreActive);
+router.get('/stores/:id/active', asyncHandler(adminController.setStoreActive));
 
 module.exports = router;

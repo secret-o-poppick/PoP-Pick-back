@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose");
+const { Schema } = require('mongoose');
 
 const AddressSchema = new Schema(
   {
@@ -16,11 +16,11 @@ const AddressSchema = new Schema(
     },
     latitude: {
       type: Number,
-      required: true,
+      // required: true,
     },
     longitude: {
       type: Number,
-      required: true,
+      // required: true,
     },
   },
   {

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const UserSchema = require('./schemas/user');
 const StoreSchema = require('./schemas/store');
+const AddressSchema = require('./schemas/address');
 const LocationCategorySchema = require('./schemas/locationCategory');
 const CategorySchema = require('./schemas/category');
 
@@ -12,3 +13,4 @@ exports.LocationCategory = mongoose.model(
   LocationCategorySchema
 );
 exports.Category = mongoose.model('Category', CategorySchema);
+exports.Address = mongoose.model('Address', AddressSchema);

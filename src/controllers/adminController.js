@@ -1,6 +1,6 @@
 const categoryService = require('../services/categoryService');
 const userService = require('../services/userService');
-
+const adminService = require('../services/adminService');
 /**
  * User
  */
@@ -94,8 +94,11 @@ exports.getStoreById = async (req, res, next) => {
 
 // 팝업 스토어 등록
 exports.createStore = async (req, res, next) => {
-  try {
-  } catch (e) {}
+  const files = req.files;
+  const storeInfo = JSON.parse(req.body.data);
+  const data = adminService.createStore(files, storeInfo);
+
+  res.status(200).json(data);
 };
 
 // 팝업 스토어 수정

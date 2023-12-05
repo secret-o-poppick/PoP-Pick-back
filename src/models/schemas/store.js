@@ -16,14 +16,20 @@ const StoreSchema = new Schema(
       required: true,
       ref: 'Category',
     },
+    address: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'Address',
+    },
     locationId: {
       type: [ObjectId],
       required: true,
       ref: 'LocationCategory',
     },
     images: {
-      type: [String],
+      type: [{ String, Boolean }],
       required: true,
+      ref: 'Image',
     },
     startDate: {
       type: Date,
