@@ -123,3 +123,35 @@ exports.removeUserRefreshToken = async (socialId, sns) => {
 
   return user;
 };
+
+// 팝업스토어 목록 조회(북마크)
+exports.getUserBookmarks = async (socialId, sns) => {
+  const user = await User.findOne({ socialId, sns }).populate({
+    path: 'bookmarks',
+    populate: {
+      path: 'categoryId',
+    },
+  });
+
+  if (!user) {
+    new APIError('유저가 존재하지 않습니다.');
+  }
+
+  return user.bookmarks ?? [];
+};
+
+// 팝업스토어 목록 조회 (좋아요)
+exports.getUserLikes = async (socialId, sns) => {
+  const user = await User.findOne({ socialId, sns }).populate({
+    path: 'likes',
+    populate: {
+      path: 'categoryId',
+    },
+  });
+
+  if (!user) {
+    new APIError('유저가 존재하지 않습니다.');
+  }
+
+  return user.likes ?? [];
+};

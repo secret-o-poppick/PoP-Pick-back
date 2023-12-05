@@ -52,7 +52,9 @@ const isAuth = async (req, res, next) => {
       }
 
       // 리프레시토큰 유효기간 체크
-      const refreshExp = new Date(refreshExpiresIn * 1000);
+      const refreshExp = new Date(
+        currentDate.getTime() + refreshExpiresIn * 1000
+      );
       if (refreshExp < currentDate) {
         // 리프레시 토큰 지우기
         await removeUserRefreshToken(decodedPayload.sub, '카카오');
@@ -65,12 +67,14 @@ const isAuth = async (req, res, next) => {
       }
 
       // 리프레시토큰 갱신
-      await updateUserRefreshToken(
-        decodedPayload.sub,
-        '카카오',
-        newTokens.refresh_token,
-        newTokens.refresh_token_expires_in
-      );
+      if (newTokens.refresh_token) {
+        await updateUserRefreshToken(
+          decodedPayload.sub,
+          '카카오',
+          newTokens.refresh_token,
+          newTokens.refresh_token_expires_in
+        );
+      }
 
       req.auth = decodedPayload;
       req.id_token = newTokens.id_token;

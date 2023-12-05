@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const { Schema } = require('mongoose');
 
 const UserSchema = new Schema(
@@ -45,13 +46,15 @@ const UserSchema = new Schema(
       default: '일반',
       required: true,
     },
-    bookmark: {
-      type: String,
+    bookmarks: {
+      type: [ObjectId],
       required: false,
+      ref: 'Store',
     },
     likes: {
-      type: String,
+      type: [ObjectId],
       required: false,
+      ref: 'Store',
     },
     refreshToken: {
       type: String,
