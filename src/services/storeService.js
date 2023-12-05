@@ -31,6 +31,9 @@ exports.getStores = async function (query) {
     ];
   }
   if (locationId) conditions.locationId = { $in: [locationId] };
+
+  if (adultVerification) conditions.adultVerification = true;
+
   const stores = await Store.find(conditions)
     .populate('categoryId')
     .skip((page - 1) * perPage)
