@@ -17,7 +17,7 @@ exports.getStores = async function (query) {
   } = query;
   const conditions = {};
 
-  if (title) conditions.title = { $regex: new RegExp(title, 'i') };
+  if (title) conditions.title = { $regex: new RegExp(title, "i") };
   if (startDate || endDate) {
     conditions.$or = [
       { startDate: { $gte: startDate, $lte: endDate } },
@@ -32,7 +32,7 @@ exports.getStores = async function (query) {
   }
   if (locationId) conditions.locationId = { $in: [locationId] };
   const stores = await Store.find(conditions)
-    .populate('categoryId')
+    .populate("categoryId")
     .skip((page - 1) * perPage)
     .limit(Number(perPage));
 
@@ -42,7 +42,14 @@ exports.getStores = async function (query) {
 // 스토어 상세 조회
 exports.getStoreById = async (params) => {
   const store = await Store.findOne({ _id: params.storeId })
-    .populate("address")
+    .populate({
+      path: "address",
+      model: "Address",
+    })
+    .populate({
+      path: "categoryId",
+      model: "Category",
+    })
     .exec();
   console.log(store);
   return store;
@@ -52,6 +59,5 @@ exports.getStoreById = async (params) => {
 exports.createStore = async (body) => {
   console.log(body);
   const store = await Store.create(body.storeInfo);
-
   return store;
 };
