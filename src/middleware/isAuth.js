@@ -38,13 +38,12 @@ const isAuth = async (req, res, next) => {
       throw new AuthError('Invalid issuer or audience');
     }
 
+    const user = await getUsersByUserSocialId(decodedPayload.sub, '카카오');
     // 5. 페이로드의 exp 값이 현재 UNIX 타임스탬프(Timestamp)보다 큰 값인지 확인(ID 토큰이 만료되지 않았는지 확인)
     const decodedPayloadExp = new Date(decodedPayload.exp * 1000);
     const currentDate = new Date();
     // id토큰 유효기간 체크
     if (decodedPayloadExp < currentDate) {
-      const user = await getUsersByUserSocialId(decodedPayload.sub, '카카오');
-
       const refreshToken = user.refreshToken;
       const refreshExpiresIn = user.refreshExpiresIn;
       if (!refreshToken || !refreshExpiresIn) {
@@ -76,7 +75,7 @@ const isAuth = async (req, res, next) => {
         );
       }
 
-      req.auth = decodedPayload;
+      req.auth = { ...decodedPayload, _id: user._id };
       req.id_token = newTokens.id_token;
       next();
       return;
@@ -113,7 +112,7 @@ const isAuth = async (req, res, next) => {
       throw new AuthError('Unauthorized');
     }
 
-    req.auth = isValidSignature;
+    req.auth = { ...isValidSignature, _id: user._id };
     next();
   } catch (error) {
     console.log(error);
