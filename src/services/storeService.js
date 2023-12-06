@@ -1,7 +1,7 @@
-const { cannotHaveAUsernamePasswordPort } = require("whatwg-url");
-const { category } = require("../middleware/validator");
-const { Store } = require("../models/index");
-const { NotFoundError } = require("../utils/error");
+const { cannotHaveAUsernamePasswordPort } = require('whatwg-url');
+const { category } = require('../middleware/validator');
+const { Store } = require('../models/index');
+const { NotFoundError } = require('../utils/error');
 
 // 스토어 목록 조희
 exports.getStores = async function (query) {
@@ -17,7 +17,7 @@ exports.getStores = async function (query) {
   } = query;
   const conditions = {};
 
-  if (title) conditions.title = { $regex: new RegExp(title, "i") };
+  if (title) conditions.title = { $regex: new RegExp(title, 'i') };
   if (startDate || endDate) {
     conditions.$or = [
       { startDate: { $gte: startDate, $lte: endDate } },
@@ -32,7 +32,7 @@ exports.getStores = async function (query) {
   }
   if (locationId) conditions.locationId = { $in: [locationId] };
   const stores = await Store.find(conditions)
-    .populate("categoryId")
+    .populate('categoryId')
     .skip((page - 1) * perPage)
     .limit(Number(perPage));
 
@@ -43,12 +43,12 @@ exports.getStores = async function (query) {
 exports.getStoreById = async (params) => {
   const store = await Store.findOne({ _id: params.storeId })
     .populate({
-      path: "address",
-      model: "Address",
+      path: 'address',
+      model: 'Address',
     })
     .populate({
-      path: "categoryId",
-      model: "Category",
+      path: 'categoryId',
+      model: 'Category',
     })
     .exec();
   console.log(store);
