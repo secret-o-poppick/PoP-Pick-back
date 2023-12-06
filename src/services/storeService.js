@@ -1,3 +1,7 @@
+
+const { cannotHaveAUsernamePasswordPort } = require('whatwg-url');
+const { category } = require('../middleware/validator');
+const { NotFoundError } = require('../utils/error');
 const { mongoose, Types } = require('mongoose');
 const { ValidationError } = require('../utils/error');
 const { Store, User } = require('../models/index');
@@ -44,7 +48,14 @@ exports.getStores = async function (query) {
 // 스토어 상세 조회
 exports.getStoreById = async (params) => {
   const store = await Store.findOne({ _id: params.storeId })
-    .populate('address')
+    .populate({
+      path: 'address',
+      model: 'Address',
+    })
+    .populate({
+      path: 'categoryId',
+      model: 'Category',
+    })
     .exec();
   console.log(store);
   return store;
@@ -54,7 +65,6 @@ exports.getStoreById = async (params) => {
 exports.createStore = async (body) => {
   console.log(body);
   const store = await Store.create(body.storeInfo);
-
   return store;
 };
 
