@@ -1,22 +1,31 @@
-const { Address } = require("../models/index");
+const { Address } = require('../models/index');
+const { Store } = require('../models/index');
 
 exports.getAddressesByCoordinate = async (query) => {
   const { x1, x2, y1, y2 } = query;
-  // console.log(x1, x2, y1, y2);
-  const addresses = await Address.find({
-    x: { $gt: x1, $lt: x2 }, // x1보다 크고 x2보다 작은 범위
-    y: { $gt: y1, $lt: y2 }, // y1보다 크고 y2보다 작은 범위
-  })
+
+  const data = await Store.find({})
     .populate({
-      path: "store",
-      model: "Store",
-      populate: {
-        path: "categoryId",
-        model: "Category",
+      path: 'address',
+      model: 'Address',
+      match: {
+        x: { $gt: x1, $lt: x2 },
+        y: { $gt: y1, $lt: y2 },
       },
     })
+    .populate({
+      path: 'categoryId',
+      model: 'Category',
+    })
     .exec();
-  return addresses;
+
+  // 수동으로 필터링
+  const filteredData = data.filter((d) => d.address);
+
+  console.log(filteredData.map((d) => d.address));
+  // console.log(x1, x2, y1, y2);
+
+  return filteredData;
 };
 
 exports.createAddress = async (body) => {
