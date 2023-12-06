@@ -1,7 +1,3 @@
-
-const { cannotHaveAUsernamePasswordPort } = require('whatwg-url');
-const { category } = require('../middleware/validator');
-const { NotFoundError } = require('../utils/error');
 const { mongoose, Types } = require('mongoose');
 const { ValidationError } = require('../utils/error');
 const { Store, User } = require('../models/index');
@@ -115,9 +111,8 @@ exports.updateLikes = async (storeId, userId) => {
     const user = await User.findById(userId).session(session);
     const store = await Store.findById(storeId).session(session);
 
-    const userHasBookmarked = user.likes.includes(storeId);
-
-    if (userHasBookmarked) {
+    const userHasLikes = user.likes.includes(storeId);
+    if (userHasLikes) {
       store.likes -= 1;
       user.likes = user.likes.filter((id) => id.toString() !== storeId);
     } else {

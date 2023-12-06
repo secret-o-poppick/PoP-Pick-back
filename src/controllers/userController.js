@@ -3,8 +3,19 @@ const userService = require('../services/userService');
 // 사용자 정보 조회
 exports.getUserInfo = async (req, res, next) => {
   const user = await userService.getUsersByUserSocialId(req.auth.sub, '카카오');
-  const { _id, soscialId, name, image, nickName, role, sns } = user;
-  const response = { _id, soscialId, name, image, nickName, role, sns };
+  const { _id, soscialId, name, image, nickName, role, sns, bookmarks, likes } =
+    user;
+  const response = {
+    _id,
+    soscialId,
+    name,
+    image,
+    nickName,
+    role,
+    sns,
+    bookmarks,
+    likes,
+  };
 
   if (req.id_token) {
     response.id_token = req.id_token;
