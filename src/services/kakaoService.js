@@ -39,6 +39,7 @@ exports.kakaoLogin = async (body) => {
   const user = await getUsersByUserSocialId(socialId, '카카오');
   if (!user) {
     const newUser = await User.create({
+      email: kakaoUser.email,
       socialId,
       name: nickname,
       nickName: nickname,

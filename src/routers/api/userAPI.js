@@ -18,10 +18,10 @@ router.put('/', userController.updateUserInfo);
 router.delete('/', userController.updateUserInfo);
 
 // 팝업스토어 목록 조회(북마크)
-router.get('/bookmarks', userController.getUserBookmarks);
+router.get('/bookmarks', asyncHandler(userController.getUserBookmarks));
 
 // 팝업스토어 목록 조회 (좋아요)
-router.get('/likes', userController.getUserLikes);
+router.get('/likes', asyncHandler(userController.getUserLikes));
 
 // 등록자 권한 신청
 router.put('/authorizations', userController.requestRegister);

@@ -38,13 +38,12 @@ const isAuth = async (req, res, next) => {
       throw new AuthError('Invalid issuer or audience');
     }
 
+    const user = await getUsersByUserSocialId(decodedPayload.sub, '카카오');
     // 5. 페이로드의 exp 값이 현재 UNIX 타임스탬프(Timestamp)보다 큰 값인지 확인(ID 토큰이 만료되지 않았는지 확인)
     const decodedPayloadExp = new Date(decodedPayload.exp * 1000);
     const currentDate = new Date();
     // id토큰 유효기간 체크
     if (decodedPayloadExp < currentDate) {
-      const user = await getUsersByUserSocialId(decodedPayload.sub, '카카오');
-
       const refreshToken = user.refreshToken;
       const refreshExpiresIn = user.refreshExpiresIn;
       if (!refreshToken || !refreshExpiresIn) {
@@ -52,7 +51,9 @@ const isAuth = async (req, res, next) => {
       }
 
       // 리프레시토큰 유효기간 체크
-      const refreshExp = new Date(refreshExpiresIn * 1000);
+      const refreshExp = new Date(
+        currentDate.getTime() + refreshExpiresIn * 1000
+      );
       if (refreshExp < currentDate) {
         // 리프레시 토큰 지우기
         await removeUserRefreshToken(decodedPayload.sub, '카카오');
@@ -65,14 +66,16 @@ const isAuth = async (req, res, next) => {
       }
 
       // 리프레시토큰 갱신
-      await updateUserRefreshToken(
-        decodedPayload.sub,
-        '카카오',
-        newTokens.refresh_token,
-        newTokens.refresh_token_expires_in
-      );
+      if (newTokens.refresh_token) {
+        await updateUserRefreshToken(
+          decodedPayload.sub,
+          '카카오',
+          newTokens.refresh_token,
+          newTokens.refresh_token_expires_in
+        );
+      }
 
-      req.auth = decodedPayload;
+      req.auth = { ...decodedPayload, _id: user._id };
       req.id_token = newTokens.id_token;
       next();
       return;
@@ -109,7 +112,7 @@ const isAuth = async (req, res, next) => {
       throw new AuthError('Unauthorized');
     }
 
-    req.auth = isValidSignature;
+    req.auth = { ...isValidSignature, _id: user._id };
     next();
   } catch (error) {
     console.log(error);

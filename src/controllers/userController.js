@@ -27,14 +27,14 @@ exports.deleteUserInfo = async (req, res, next) => {
 
 // 팝업스토어 목록 조회(북마크)
 exports.getUserBookmarks = async (req, res, next) => {
-  try {
-  } catch (e) {}
+  const bookMarks = await userService.getUserBookmarks(req.auth.sub, '카카오');
+  res.status(200).json(bookMarks);
 };
 
 // 팝업스토어 목록 조회 (좋아요)
 exports.getUserLikes = async (req, res, next) => {
-  try {
-  } catch (e) {}
+  const likes = await userService.getUserLikes(req.auth.sub, '카카오');
+  res.status(200).json(likes);
 };
 
 // 등록자 권한 신청

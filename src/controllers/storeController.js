@@ -1,6 +1,6 @@
-const storeService = require("../services/storeService");
-const { Types } = require("mongoose");
-const { ValidationError } = require("../utils/error");
+const storeService = require('../services/storeService');
+const { Types } = require('mongoose');
+const { ValidationError } = require('../utils/error');
 
 //팝업 스토어 목록 조회
 exports.getStores = async (req, res, next) => {
@@ -12,7 +12,7 @@ exports.getStores = async (req, res, next) => {
 exports.getStoresByStoreId = async (req, res, next) => {
   try {
     if (!Types.ObjectId.isValid(req.params.storeId)) {
-      throw new ValidationError("storeId가 정확하지 않습니다.");
+      throw new ValidationError('storeId가 정확하지 않습니다.');
     }
     const store = await storeService.getStoreById(req.params);
     res.json(store);
@@ -28,14 +28,17 @@ exports.incrementViews = async (req, res, next) => {
 };
 
 //팝업 스토어 북마크 표시
-exports.addBookmarks = async (req, res, next) => {
-  try {
-  } catch (e) {}
-  s;
+exports.updateBookmarks = async (req, res, next) => {
+  const { storeId } = req.params;
+  const { _id } = req.auth;
+  const store = await storeService.updateBookmarks(storeId, _id);
+  res.status(200).json(store);
 };
 
 //팝업 스토어 좋아요 표시
-exports.addLikes = async (req, res, next) => {
-  try {
-  } catch (e) {}
+exports.updateLikes = async (req, res, next) => {
+  const { storeId } = req.params;
+  const { _id } = req.auth._id;
+  const store = await storeService.updateLikes(storeId, _id);
+  res.status(200).json(store);
 };

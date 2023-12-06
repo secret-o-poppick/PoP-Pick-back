@@ -1,7 +1,10 @@
+
 const { cannotHaveAUsernamePasswordPort } = require('whatwg-url');
 const { category } = require('../middleware/validator');
-const { Store } = require('../models/index');
 const { NotFoundError } = require('../utils/error');
+const { mongoose, Types } = require('mongoose');
+const { ValidationError } = require('../utils/error');
+const { Store, User } = require('../models/index');
 
 // 스토어 목록 조희
 exports.getStores = async function (query) {
@@ -31,6 +34,9 @@ exports.getStores = async function (query) {
     ];
   }
   if (locationId) conditions.locationId = { $in: [locationId] };
+
+  if (adultVerification) conditions.adultVerification = true;
+
   const stores = await Store.find(conditions)
     .populate('categoryId')
     .skip((page - 1) * perPage)
@@ -60,4 +66,74 @@ exports.createStore = async (body) => {
   console.log(body);
   const store = await Store.create(body.storeInfo);
   return store;
+};
+
+//팝업 스토어 북마크 표시
+exports.updateBookmarks = async (storeId, userId) => {
+  if (!Types.ObjectId.isValid(storeId) || !Types.ObjectId.isValid(userId)) {
+    throw new ValidationError('storeId, userId가 정확하지 않습니다.');
+  }
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const user = await User.findById(userId).session(session);
+    const store = await Store.findById(storeId).session(session);
+
+    const userHasBookmarked = user.bookmarks.includes(storeId);
+
+    if (userHasBookmarked) {
+      // store.bookmarks -= 1;
+      user.bookmarks = user.bookmarks.filter((id) => id.toString() !== storeId);
+    } else {
+      // store.bookmarks += 1;
+      user.bookmarks.push(storeId);
+    }
+
+    // await store.save();
+    await user.save();
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return store;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+  }
+};
+
+//팝업 스토어 좋아요 표시
+exports.updateLikes = async (storeId, userId) => {
+  if (!Types.ObjectId.isValid(storeId) || !Types.ObjectId.isValid(userId)) {
+    throw new ValidationError('storeId, userId가 정확하지 않습니다.');
+  }
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const user = await User.findById(userId).session(session);
+    const store = await Store.findById(storeId).session(session);
+
+    const userHasBookmarked = user.likes.includes(storeId);
+
+    if (userHasBookmarked) {
+      store.likes -= 1;
+      user.likes = user.likes.filter((id) => id.toString() !== storeId);
+    } else {
+      store.likes += 1;
+      user.likes.push(storeId);
+    }
+
+    await store.save();
+    await user.save();
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return store;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+  }
 };
